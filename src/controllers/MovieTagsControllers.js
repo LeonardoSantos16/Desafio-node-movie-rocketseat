@@ -2,10 +2,11 @@ const knex = require("../database/knex")
 
 class MovieTagsControllers{
     async create(request, response){
-        const {name, user_id, note_id} = request.body;
+        const {name, note_id} = request.body;
+        const user_id = request.user.id;
         const noteExists = await knex("movie_notes").where('id',note_id)
         const userExists = await knex("users").where('id', user_id)
-        if(noteExists.length && userExists.length != 0){
+        if(noteExists && userExists){
             const createTag = await knex("movie_tags").insert({
                 name,
                 user_id,
@@ -22,8 +23,9 @@ class MovieTagsControllers{
     }
 
     async index(request, response) {
-        const { id } = request.params
-        const tags = await knex("movie_tags").where('user_id', id)
+        
+        const user_id = request.user.id;
+        const tags = await knex("movie_tags").where('user_id', user_id)
     
         return response.json(tags)
       }

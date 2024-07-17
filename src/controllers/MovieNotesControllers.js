@@ -2,8 +2,8 @@ const knex = require("../database/knex")
 
 class MovieNotesControllers{
     async create(request, response){
-        const { title, description, user_id, rating } = request.body;
-
+        const { title, description, rating } = request.body;
+        const user_id = request.user.id;
         const user = await knex("users").where('id', user_id);
         if(user.length != 0){
             const [createNotes] = await knex("movie_notes").insert({
