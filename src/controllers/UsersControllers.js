@@ -24,7 +24,7 @@ class UsersControllers{
     async update(request, response){
         const { name, email, passwordOld} = request.body;
         let { password } = request.body;
-        const  id = request.user.id;
+        const id = request.user.id;
         const  [ usersUpdate ] = await knex("users").where({ id });
        
         if(!usersUpdate) {
@@ -39,7 +39,7 @@ class UsersControllers{
         if(password && passwordOld) {
             const checkOldPassword = await compare(passwordOld, usersUpdate.password)
             if(!checkOldPassword) {
-                console.log("teste3")
+    
               throw new AppError("A senha antiga não confere.")
             }
       

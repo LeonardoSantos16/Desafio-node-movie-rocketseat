@@ -8,9 +8,10 @@ class SessionsController{
     async create(request, response){
         const { email, password} = request.body;
         const user = await knex("users").where({ email }).first();
-        const passwordExists = compare(password, user.password);
-
-        if(!user && !passwordExists){
+        
+        const passwordExists = await compare(password, user.password);
+        
+        if(!user || !passwordExists){
             throw new AppError("email ou senha incorreta", 401);
         }
 
